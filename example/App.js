@@ -21,8 +21,8 @@
  * @flow
  */
 
-import React, {Component} from 'react';
-import {Alert, StyleSheet, Text, TouchableHighlight, View} from 'react-native';
+import React from 'react';
+import {Alert, StyleSheet, Text, View} from 'react-native';
 import {LoginButton, ShareDialog} from 'react-native-fbsdk';
 
 const SHARE_LINK_CONTENT = {
@@ -30,8 +30,8 @@ const SHARE_LINK_CONTENT = {
   contentUrl: 'https://www.facebook.com/',
 };
 
-export default class App extends Component<{}> {
-  _shareLinkWithShareDialog = async () => {
+const App: () => React$Node = () => {
+  const _shareLinkWithShareDialog = async () => {
     const canShow = await ShareDialog.canShow(SHARE_LINK_CONTENT);
     if (canShow) {
       try {
@@ -49,21 +49,19 @@ export default class App extends Component<{}> {
     }
   };
 
-  render() {
-    return (
-      <View style={styles.container}>
-        <LoginButton
-          onLoginFinished={(error, data) => {
-            Alert.alert(JSON.stringify(error || data, null, 2));
-          }}
-        />
-        <TouchableHighlight onPress={this._shareLinkWithShareDialog}>
-          <Text style={styles.shareText}>Share link with ShareDialog</Text>
-        </TouchableHighlight>
-      </View>
-    );
-  }
-}
+  return (
+    <View style={styles.container}>
+      <LoginButton
+        onLoginFinished={(error, data) => {
+          Alert.alert(JSON.stringify(error || data, null, 2));
+        }}
+      />
+      <Text style={styles.shareLink} onPress={_shareLinkWithShareDialog}>
+        Share link with ShareDialog
+      </Text>
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -72,8 +70,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#F5FCFF',
   },
-  shareText: {
+  shareLink: {
+    color: 'blue',
     fontSize: 20,
-    margin: 10,
+    margin: 20,
   },
 });
+
+export default App;
